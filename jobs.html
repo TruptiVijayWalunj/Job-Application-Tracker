@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Applications - Job Tracker{% endblock %}
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>My Applications</h1>
+        <p>Search, filter, edit or delete your applications.</p>
+    </div>
+    <a class="button" href="{{ url_for('add_job') }}">+ Add Job</a>
+</div>
+
+<form class="filters" method="GET">
+    <input type="text" name="search" placeholder="Search company, role, location" value="{{ search }}">
+    <select name="status">
+        <option value="">All Statuses</option>
+        {% for s in ['Applied','Shortlisted','Interview','Selected','Rejected'] %}
+        <option value="{{ s }}" {% if status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<div class="card table-wrap">
+<table>
+<tr>
+    <th>Company</th><th>Role</th><th>Location</th><th>Status</th>
+    <th>Interview</th><th>Actions</th>
+</tr>
+{% for job in jobs %}
+<tr>
+    <td>{{ job.company_name }}</td>
+    <td>{{ job.job_role }}</td>
+    <td>{{ job.location or '-' }}</td>
+    <td><span class="status">{{ job.status }}</span></td>
+    <td>{{ job.interview_date or '-' }}</td>
+    <td class="actions">
+        <a href="{{ url_for('edit_job', job_id=job.id) }}">Edit</a>
+        <form method="POST" action="{{ url_for('delete_job', job_id=job.id) }}" onsubmit="return confirm('Delete this application?');">
+            <button class="danger" type="submit">Delete</button>
+        </form>
+    </td>
+</tr>
+{% else %}
+<tr><td colspan="6">No applications found.</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

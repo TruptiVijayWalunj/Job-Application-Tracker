@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Edit Job - Job Tracker{% endblock %}
+{% block content %}
+<div class="card form-card">
+    <h1>Edit Job Application</h1>
+    <form method="POST">
+        <label>Company Name</label>
+        <input type="text" name="company_name" value="{{ job.company_name }}" required>
+        <label>Job Role</label>
+        <input type="text" name="job_role" value="{{ job.job_role }}" required>
+        <label>Location</label>
+        <input type="text" name="location" value="{{ job.location or '' }}">
+        <label>Applied Date</label>
+        <input type="date" name="applied_date" value="{{ job.applied_date or '' }}">
+        <label>Status</label>
+        <select name="status">
+            {% for s in ['Applied','Shortlisted','Interview','Selected','Rejected'] %}
+            <option value="{{ s }}" {% if job.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+        <label>Interview Date</label>
+        <input type="date" name="interview_date" value="{{ job.interview_date or '' }}">
+        <label>Notes</label>
+        <textarea name="notes" rows="4">{{ job.notes or '' }}</textarea>
+        <button type="submit">Update Application</button>
+    </form>
+</div>
+{% endblock %}
